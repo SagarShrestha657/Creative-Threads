@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Build artifacts
+build/
+dist/
+coverage/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.pid
+
+# Environment variables
+.env
+.env.local
+
+# IDE specific files
+*.suo
+*.suo.meta
+*.user
+*.sln
+*.cache
+.idea/
+
+# Test related files
+**/__tests__/**
+**/__mocks__/**
+*.test.js
+*.spec.js
