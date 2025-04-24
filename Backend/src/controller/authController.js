@@ -132,7 +132,11 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // secure only in production
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 'None' for cross-site (prod), 'Lax' for local dev
+    })
     res.status(200).json({ message: "Logged Out" });
   } catch (error) {
     console.log("Error in Logout Controller", error.message);
@@ -304,7 +308,7 @@ export const getotheruserprofile = async (req, res) => {
     const user = await User.findOne({ username: req.params.username }).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    res.status(200).json({ user:user });
+    res.status(200).json({ user: user });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

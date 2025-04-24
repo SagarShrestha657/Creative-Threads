@@ -3,8 +3,8 @@ import axios from "axios";
 export const axiosInstance = axios.create({
   // baseURL: "http://localhost:5001/api",
   baseURL:
-    process.env.NODE_ENV === "development"
+    import.meta.env.NODE_ENV === "development"
       ? "http://localhost:5001/api"
-      : "https://creativethreads.onrender.com/api",
+      : import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
