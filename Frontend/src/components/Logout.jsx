@@ -5,8 +5,6 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const Logout = () => {
 
-    const {checkAuth}=useAuthStore()
-
     const handleLogout = async () => {
         try {
           await axiosInstance.post("/auth/logout");

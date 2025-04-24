@@ -1,0 +1,42 @@
+services:
+  frontend:
+    build:
+      context: ./Frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Frontend:/app
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./Backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./Backend:/app
+    env_file:
+      - ./Backend/.env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+
+volumes:
+  mongo-data:
