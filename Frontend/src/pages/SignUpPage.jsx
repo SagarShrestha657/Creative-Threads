@@ -24,7 +24,7 @@ const SignUp = () => {
 
   const savesignup = async () => {
     if (!validate(signup.email)) {
-      // seterror("invalid email")
+      seterror("invalid email")
       return;
     }
     localStorage.setItem("email", signup.email);
