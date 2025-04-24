@@ -5,6 +5,6 @@ export const axiosInstance = axios.create({
   baseURL:
     import.meta.env.NODE_ENV === "development"
       ? "http://localhost:5001/api"
-      : import.meta.env.VITE_BACKEND_URL,
+      : "https://creative-theard.onrender.com/api",
   withCredentials: true,
 });
