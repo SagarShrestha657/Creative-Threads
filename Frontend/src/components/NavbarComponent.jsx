@@ -17,15 +17,17 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
-  const SOCKET_URL = "http://localhost:5001";
-  const socket = io.connect(SOCKET_URL,{
+  const socketUrl = process.env.NODE_ENV === "production"
+    ? import.meta.env.VITE_BACKEND_URL // Use your production URL here
+    : "http://localhost:5001";  // Local development URL
+  const socket = io.connect(socketUrl, {
     // transport:["websocket"]
   })
 
   const handleLogout = async () => {
     try {
       await axiosInstance.post("/auth/logout");
-      socket.disconnect()      
+      socket.disconnect()
       sessionStorage.clear();
       window.location.href = "/login";
       toast.success("Logout successfully");
