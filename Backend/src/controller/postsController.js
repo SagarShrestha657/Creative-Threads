@@ -402,14 +402,14 @@ export const addpost = async (req, res) => {
 export const getmypost = async (req, res) => {
   try {
     // Find all posts by the given artist
-    const posts = await Post.find({ createdBy: req.decode.userId });
+    const posts = await Post.find({ username: req.decode.userId });
     console.log(posts);
 
 
     if (posts.length === 0) {
       return res
         .status(404)
-        .json({ message: "No posts found for this artist: " + posts.username });
+        .json({ message: "No posts found for this artist " });
     }
     // Respond with the posts found
     res.status(200).json({
@@ -513,7 +513,9 @@ export const suggested = async (req, res) => {
 export const getotheruserposts = async (req, res) => {
   try {
     const username = req.query.username;
-    const posts = await Post.findOne({ username: username })
+    const user = await User.findOne({ username: username });
+    if (!user) return res.status(404).json({ message: "user not found" });
+    const posts = await Post.findOne({ username: user_id })
     if (!posts) return res.status(404).json({ message: "user have not posted " })
     return res.status(200).json(posts)
   } catch (err) {

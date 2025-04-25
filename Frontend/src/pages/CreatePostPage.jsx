@@ -85,7 +85,7 @@ const CreatePost = () => {
         try {
             await axiosInstance.post(`/posts/addpost`, formData);
             toast.success('Post created successfully!');
-            navigate("/profile");
+            navigate(`/profile/${authUser._id}`);
         } catch (err) {
             console.error('Error creating post:', err);
             if (err.response?.data?.message) {
