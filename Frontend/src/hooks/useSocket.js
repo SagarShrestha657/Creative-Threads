@@ -8,7 +8,11 @@ const useSocket = (userId) => {
   useEffect(() => {
     // Ensure you only create a socket connection if userId exists
     if (userId) {
-      const newSocket = io("http://localhost:5000");  // Replace with your server's URL
+      const socketUrl = process.env.NODE_ENV === "production"
+        ? import.meta.env.VITE_BACKEND_URL // Use your production URL here
+        : "http://localhost:5001";  // Local development URL
+
+      const newSocket = io(socketUrl);
 
       // Join a room specific to the user
       newSocket.emit("join", userId);

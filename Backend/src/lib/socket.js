@@ -12,7 +12,10 @@ const onlineUsers = new Map();
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173","https://creative-theards.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://creative-theards.vercel.app",
+    ],
     methods: ["GET", "POST"],
   },
 });

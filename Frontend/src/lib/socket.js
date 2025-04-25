@@ -1,5 +1,7 @@
 import { io } from "socket.io-client";
 
-export const socket = io(["http://localhost:5001",import.meta.env.VITE_BACKEND_URL], {
+const backendUrl = process.env.NODE_ENV === 'production' ? import.meta.env.VITE_BACKEND_URL : "http://localhost:5001";
+
+export const socket = io(backendUrl, {
   autoConnect: false,
 });
