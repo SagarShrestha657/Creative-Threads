@@ -25,6 +25,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "https://creative-theards.vercel.app/api",
+  "https://creative-theards.vercel.app",
 ];
 app.use(
   cors({
