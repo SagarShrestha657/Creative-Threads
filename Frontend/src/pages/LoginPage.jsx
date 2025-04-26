@@ -5,6 +5,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { validate } from "email-validator";
 import { socket } from "../lib/socket";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Login = () => {
   const [login, setlogin] = useState({ email: "", password: "" });
@@ -38,6 +40,7 @@ const Login = () => {
       return;
     }
     try {
+      NProgress.start();
       const res = await axiosInstance.post("/auth/login", login);
       // console.log(res);
       const {
@@ -82,6 +85,7 @@ const Login = () => {
       }
       toast.success("Login successful!");
       setlogin({ email: "", password: "" });
+      NProgress.done();
       navigate("/");
 
       //   const res = await axiosInstance.post("/auth/login", login)
@@ -112,6 +116,7 @@ const Login = () => {
       toast.error(message);
       seterror(message);
     }
+    NProgress.done();
   };
 
   return (

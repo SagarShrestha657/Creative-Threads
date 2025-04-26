@@ -3,6 +3,8 @@ import { axiosInstance } from "../lib/axios";
 import { X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const ExploreComponent = () => {
   const [user, setUser] = useState([]);
@@ -82,8 +84,10 @@ const ExploreComponent = () => {
   };
 
   useEffect(() => {
+    NProgress.start();
     fetchUser();
     fetchPost();
+    NProgress.done();
   }, []);
 
   useEffect(() => {

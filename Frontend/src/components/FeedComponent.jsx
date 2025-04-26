@@ -8,6 +8,8 @@ import { Heart, MessageCircle, Share, Bookmark, Send } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Feed = () => {
   const [artworks, setArtworks] = useState([]);
@@ -50,7 +52,9 @@ const Feed = () => {
   };
 
   useEffect(() => {
+    NProgress.start();
     fetchArtworks();
+    NProgress.done();
   }, [userId]);
 
   const handleLikeToggle = async (postId) => {

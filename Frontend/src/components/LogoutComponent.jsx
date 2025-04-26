@@ -1,6 +1,7 @@
 import React from 'react';
 import { axiosInstance } from '../lib/axios';
 import io from "socket.io-client"
+import { useNavigate } from 'react-router-dom';
 
 const LogoutComponent = () => {
   // const SOCKET_URL = "http://localhost:5001";
@@ -10,13 +11,16 @@ const LogoutComponent = () => {
 
   const handleLogout = async () => {
     try {
+      NProgress.start();
       await axiosInstance.post('/auth/logout');
       socket.disconnect()
       sessionStorage.clear();
-      window.location.href = "/login";
+      NProgress.done()
+      useNavigate("/login")
     } catch (error) {
       console.error('Logout failed', error);
     }
+    NProgress.done()
   };
 
   return (

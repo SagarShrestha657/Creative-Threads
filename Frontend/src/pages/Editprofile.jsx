@@ -46,6 +46,7 @@ export default function EditProfile() {
             userUpdate("profilePic", res.data.profilePic);
 
             toast.success("Profile updated successfully");
+            NProgress.done();
             navigate(`/profile/${authUser._id}`, { replace: true });
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong");

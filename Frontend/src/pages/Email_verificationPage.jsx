@@ -4,6 +4,8 @@ import { axiosInstance } from '../lib/axios'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/useAuthStore'
 import toast from 'react-hot-toast' // ✅ toast import
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Email_verification = () => {
   const [code, setcode] = useState("")
@@ -22,17 +24,20 @@ const Email_verification = () => {
 
     let email = localStorage.getItem("email")
     try {
+      NProgress.start();
       const data = { email: email, code: code }
       const res = await axiosInstance.post("/auth/verificationcode", data)
       console.log(res);      
       await checkAuth()
       toast.success("Email verified successfully!")
       setcode("")
+      NProgress.done();
       navigate("/")
     } catch (error) {
       console.log(error?.response?.data?.message)
       toast.error(error?.response?.data?.message || "Verification failed")
     }
+    NProgress.done();
   }
 
   const back = () => {

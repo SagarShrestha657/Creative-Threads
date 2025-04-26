@@ -5,6 +5,8 @@ import { axiosInstance } from '../lib/axios';
 import Navbar from '../components/NavbarComponent';
 import toast from 'react-hot-toast';
 import { Heart } from 'lucide-react';
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('posts'); // Set default active tab
@@ -39,6 +41,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
+        NProgress.start();
         if (authUser.role === "artist") {
             fetchPosts();
         }
@@ -47,6 +50,7 @@ const Profile = () => {
             setActiveTab("suggested")
             console.log(suggestedUsers)
         }
+        NProgress.done();
     }, []);
 
     const navigating = () => {

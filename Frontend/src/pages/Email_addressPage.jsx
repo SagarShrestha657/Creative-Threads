@@ -4,6 +4,8 @@ import { axiosInstance } from '../lib/axios'
 import { useAuthStore } from '../store/useAuthStore'
 import { validate } from "email-validator"
 import toast from 'react-hot-toast' // ✅ toast import
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Email_address = () => {
   const [email, setemail] = useState("")
@@ -28,15 +30,18 @@ const Email_address = () => {
     localStorage.setItem("email", email)
 
     try {
+      NProgress.start();
       const res = await axiosInstance.post("/auth/emailaddress", { email })
       await user(res.data)
       toast.success("Email sent successfully!")
       setemail("")
+      NProgress.done();
       navigate("/emailverification")
     } catch (error) {
       console.log(error?.response?.data?.message)
       toast.error(error?.response?.data?.message || "Something went wrong")
     }
+    NProgress.done();
   }
 
   return (

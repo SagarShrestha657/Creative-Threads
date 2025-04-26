@@ -29,10 +29,12 @@ const SignUp = () => {
     }
     localStorage.setItem("email", signup.email);
     try {
+      NProgress.start();
       const res = await axiosInstance.post("/auth/signup", signup);
       await user(res.data);
       toast.success("Signup successful! Redirecting...");
       setsignup({ username: "", email: "", password: "", role: "" });
+      NProgress.done()
       navigate("/emailverification");
     } catch (error) {
       console.log(error.response.data.message);
@@ -40,6 +42,7 @@ const SignUp = () => {
         seterror(error.response.data.message);
       }
     }
+    NProgress.done();
   };
 
   return (

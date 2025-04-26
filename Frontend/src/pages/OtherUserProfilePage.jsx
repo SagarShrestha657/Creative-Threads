@@ -5,6 +5,8 @@ import { axiosInstance } from '../lib/axios';
 import { useAuthStore } from '../store/useAuthStore';
 import toast from 'react-hot-toast';
 import Navbar from '../components/NavbarComponent';
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const OtherUserProfile = () => {
     const { username } = useParams();
@@ -83,7 +85,9 @@ const OtherUserProfile = () => {
     };
 
     useEffect(() => {
+        NProgress.start();
         fetchUserProfile();
+        NProgress.done();
     }, [username]);
 
     const handleLikeToggle = async (postId) => {

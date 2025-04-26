@@ -14,7 +14,9 @@ import io from "socket.io-client"
 
 import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
@@ -27,14 +29,17 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
+      NProgress.start();
       await axiosInstance.post("/auth/logout");
       socket.disconnect()
       sessionStorage.clear();
-      window.location.to = "/login";
+      NProgress.done();
+      useNavigate("/login")
       toast.success("Logout successfully");
     } catch (err) {
       console.error("Logout failed", err);
     }
+    NProgress.done();
   };
 
   return (
