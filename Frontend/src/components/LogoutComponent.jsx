@@ -4,7 +4,7 @@ import io from "socket.io-client"
 import { useNavigate } from 'react-router-dom';
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import socket from "../lib/socket"
+import {socket} from "../lib/socket"
 
 const LogoutComponent = () => {
   // const SOCKET_URL = "http://localhost:5001";
@@ -19,7 +19,7 @@ const LogoutComponent = () => {
       socket.disconnect()
       sessionStorage.clear();
       NProgress.done()
-      useNavigate("/login")
+      window.location.href = '/login';
     } catch (error) {
       console.error('Logout failed', error);
     }

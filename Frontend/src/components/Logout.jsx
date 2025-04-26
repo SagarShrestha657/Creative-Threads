@@ -14,7 +14,7 @@ const Logout = () => {
       await axiosInstance.post("/auth/logout");
       sessionStorage.clear();
       NProgress.done();
-      useNavigate("/login")
+      window.location.href = "/login";
       toast.success("Logout successfully");
     } catch (err) {
       console.error("Logout failed", err);

@@ -34,10 +34,10 @@ const Navbar = () => {
       socket.disconnect()
       sessionStorage.clear();
       NProgress.done();
-      useNavigate("/login")
+      window.location.href = "/login";
       toast.success("Logout successfully");
     } catch (err) {
-      console.error("Logout failed", err);
+      console.log("Logout failed", err);
     }
     NProgress.done();
   };
