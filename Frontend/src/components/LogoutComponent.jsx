@@ -2,6 +2,8 @@ import React from 'react';
 import { axiosInstance } from '../lib/axios';
 import io from "socket.io-client"
 import { useNavigate } from 'react-router-dom';
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const LogoutComponent = () => {
   // const SOCKET_URL = "http://localhost:5001";
