@@ -5,6 +5,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import { validate } from "email-validator";
 import toast from "react-hot-toast"; // ✅ toast import
 import { socket } from "../lib/socket";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const SignUp = () => {
   const [signup, setsignup] = useState({
@@ -37,7 +39,6 @@ const SignUp = () => {
       NProgress.done()
       navigate("/emailverification");
     } catch (error) {
-      console.log(error.response.data.message);
       if (error.response.data.message) {
         seterror(error.response.data.message);
       }
