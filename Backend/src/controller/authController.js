@@ -1,4 +1,4 @@
-import { sendVerificationEmail, sendWelcomeEmail } from "../lib/email.js";
+import { OtpForEmailChange, sendVerificationEmail, sendWelcomeEmail } from "../lib/email.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
@@ -265,7 +265,7 @@ export const sendotp = async (req, res) => {
     await User.findByIdAndUpdate(req.decode.userId, {
       verificationCode: verificationCode,
     });
-    sendVerificationEmail(newEmail, verificationCode);
+    OtpForEmailChange(newEmail, verificationCode);
     res.status(200).json({ message: "code send successfully" });
   } catch (error) {
     console.log("Error in checking email address: ", error);

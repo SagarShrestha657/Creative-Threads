@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
 import { useAuthStore } from '../store/useAuthStore';
 import toast from 'react-hot-toast';
@@ -22,6 +22,7 @@ const OtherUserProfile = () => {
     const [commentsOpen, setCommentsOpen] = useState({});
     const [comments, setComments] = useState({});
     const [showFullDesc, setShowFullDesc] = useState({});
+    const navigate = useNavigate();
 
 
     const fetchUserProfile = async () => {
@@ -283,7 +284,7 @@ const OtherUserProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {suggestedUsers.map((user, index) => (
                                     <div key={index} className='w-full h-full flex flex-col bg-gray-400 border border-neutral-200/20 rounded-lg space-x-4 p-4'>
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center space-x-2 " onClick={()=>navigate(`/otheruserprofile/${user.username}`)}>
                                             <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-300">
                                                 <img src={user.profilePic} className="w-full h-full object-cover" />
                                             </div>

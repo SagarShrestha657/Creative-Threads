@@ -362,7 +362,7 @@ const uploader = async (files) => {
 // API Route to Add Post
 export const addpost = async (req, res) => {
   try {
-    const { postId, username, title, description } = req.body;
+    const { username, title, description } = req.body;
 
     // const result = await cloudinary.uploader.upload(req);
     const upload_resp = await uploader(req.files);
@@ -374,12 +374,10 @@ export const addpost = async (req, res) => {
     }
     // Create new post
     const newPost = new Post({
-      postId,
       username,
       title,
       description,
       image: image_arr, // Store the image URL returned by Cloudinary
-      createdAt: Date.now(),
     });
 
     // Save the post to the database
