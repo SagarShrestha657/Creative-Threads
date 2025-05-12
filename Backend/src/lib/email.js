@@ -72,10 +72,6 @@ export const OtpForEmailChange = async (
     <p style="font-size: 14px;">This code is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
     <p style="font-size: 12px;">If you did not request this, please ignore this email.</p>
     
-    <a href="https://creative-theards.vercel.app/setting" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #2193b0; background: #ffffff; border-radius: 5px; text-decoration: none; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
-        Verify Now
-    </a>
-    
     <p style="margin-top: 20px; font-size: 14px;">Best regards,<br><strong>CreativeThreads</strong></p>
 </div>
 

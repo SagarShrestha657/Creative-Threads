@@ -131,6 +131,11 @@ const Navbar = () => {
         <Link to="/Explore">
           <Compass className="text-white w-6 h-6" />
         </Link>
+        {authUser?.role === "artist" && (
+          <Link to="/createpost">
+            <Plus className="text-white w-6 h-6" />
+          </Link>
+        )}
         <Link to={`/profile/${authUser?._id}`}>
           <User className="text-white w-6 h-6" />
         </Link>
