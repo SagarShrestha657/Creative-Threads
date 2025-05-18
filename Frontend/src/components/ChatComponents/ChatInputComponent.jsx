@@ -57,7 +57,7 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="p-4 w-full bg-black border-t border-zinc-800">
+    <div className="p-4  w-full bg-black border-t border-zinc-800 ">
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">

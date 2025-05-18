@@ -20,7 +20,7 @@ const ChatSideBar = () => {
   return (
     <>
       <div
-        className={`w-96 border-r border-neutral-200/20 flex flex-col md:block`}
+        className={`w-full border-r border-neutral-200/20 flex flex-col md:block h-full overflow-auto `}
       >
         <div className="p-4 border-b border-neutral-200/20">
           <input

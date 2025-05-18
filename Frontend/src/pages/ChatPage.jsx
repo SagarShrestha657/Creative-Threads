@@ -26,7 +26,7 @@ const Chat = () => {
       </div>
 
       {/* 📰 Chat */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide px-4 pt-16 pb-20 lg:pt-10 lg:pb-10 lg:px-8">
+      <div className="flex-1 overflow-y-auto scrollbar-hide p-5">
         <ChatHomeComponent />
       </div>
     </div>

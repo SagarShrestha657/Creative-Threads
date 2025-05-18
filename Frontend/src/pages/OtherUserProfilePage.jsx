@@ -8,6 +8,7 @@ import Navbar from '../components/NavbarComponent';
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { X } from 'lucide-react';
+import { useChatStore } from '../store/useChatStore';
 
 const OtherUserProfile = () => {
     const { username } = useParams();
@@ -23,7 +24,8 @@ const OtherUserProfile = () => {
     const [comments, setComments] = useState({});
     const [showFullDesc, setShowFullDesc] = useState({});
     const navigate = useNavigate();
-
+    const { setSelectedUser } = useChatStore();
+     
 
     const fetchUserProfile = async () => {
         try {
@@ -152,6 +154,15 @@ const OtherUserProfile = () => {
                                     <p className="text-gray-500">{user.arttype}</p>
                                 </div>
                                 <div className="flex flex-wrap gap-3 justify-end md:justify-end">
+                                    <button className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+                                        onClick={()=>{
+                                            NProgress.start();
+                                            setSelectedUser(user);
+                                            navigate("/chat");
+                                            NProgress.done();
+                                        }} >
+                                        Message
+                                    </button>
                                     <button className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
                                         onClick={() => toggleFollowButton(user._id)}>
                                         {authUser.following?.includes(user._id) ? "Unfollow" : "Follow"}
@@ -284,7 +295,7 @@ const OtherUserProfile = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {suggestedUsers.map((user, index) => (
                                     <div key={index} className='w-full h-full flex flex-col bg-gray-400 border border-neutral-200/20 rounded-lg space-x-4 p-4'>
-                                        <div className="flex items-center space-x-2 " onClick={()=>navigate(`/otheruserprofile/${user.username}`)}>
+                                        <div className="flex items-center space-x-2 " onClick={() => navigate(`/otheruserprofile/${user.username}`)}>
                                             <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-300">
                                                 <img src={user.profilePic} className="w-full h-full object-cover" />
                                             </div>

@@ -24,12 +24,13 @@ const ChatContainer = () => {
     getMessages(selectedUser._id);
 
     const handleReceiveMessage = (msg) => {
-      // console.log("Received Message:", msg);
-
       if (!msg?.message || !msg?.senderId) {
         console.error("Received message format is incorrect:", msg);
         return;
       }
+
+      // Ignore messages sent by the current user
+      if (msg.senderId === authUser._id) return;
 
       const newMessage = {
         _id: new Date().getTime(),
@@ -59,17 +60,25 @@ const ChatContainer = () => {
   if (isMessageLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
-        <ChatHeader />
+        <div className="sticky top-0 z-10 bg-black">
+          <ChatHeader />
+        </div>
         <MessageSkeleton />
-        <ChatInput />
+        <div className="sticky bottom-0 z-10 bg-black">
+          <ChatInput />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
-      <ChatHeader />
+    <div className="flex-1 flex flex-col h-full relative">
+      {/* Fixed Header */}
+      <div className="sticky top-0 z-10 bg-black">
+        <ChatHeader />
+      </div>
 
+      {/* Messages */}
       <div
         className="flex-1 overflow-y-auto p-4 space-y-6 bg-base-200 text-white 
         scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-transparent"
@@ -87,7 +96,7 @@ const ChatContainer = () => {
           return (
             <div
               key={message._id || `${message.senderId}-${message.createdAt}`}
-              className={`flex ${isSender ? "justify-end" : "justify-start"}`}
+              className={`flex ${isSender ? "justify-end" : "justify-start"} `}
             >
               <div
                 className={`flex ${
@@ -132,7 +141,10 @@ const ChatContainer = () => {
         <div ref={messageEndRef} />
       </div>
 
-      <ChatInput />
+      {/* Fixed Footer */}
+      <div className="sticky bottom-0 z-10 bg-black">
+        <ChatInput />
+      </div>
     </div>
   );
 };

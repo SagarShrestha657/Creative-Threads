@@ -6,13 +6,39 @@ import notification from "../models/notificationModel.js";
 export const getUserForSideBar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUserId },
-    }).select("-password");
-    console.log(filteredUsers);
-    res.status(200).json(filteredUsers);
+    console.log("Logged-in User ID:", loggedInUserId);
+
+   
+    const messageUsers = await Message.find({
+      $or: [
+        { senderId: loggedInUserId }, // Messages sent by the logged-in user
+        { receiverId: loggedInUserId }, // Messages received by the logged-in user
+        { senderId: loggedInUserId, receiverId: loggedInUserId }, // Messages sent by the user to themselves
+      ],
+    })
+      .sort({ createdAt: -1 }) 
+      .select("senderId receiverId -_id");
+
+    console.log("Message Users found:", messageUsers);
+
+    // Extract unique user IDs (including self-messages)
+    const userIds = [
+      ...new Set(
+        messageUsers.flatMap((msg) => [
+          msg.senderId.toString(),
+          msg.receiverId.toString(),
+        ])
+      ),
+    ];
+
+   
+    let users = await User.find({ _id: { $in: userIds } }).select("-password");
+
+    users = users.reverse(); 
+
+    res.status(200).json(users);
   } catch (error) {
-    console.log("Message getUserForSideBar error", error.message);
+    console.error("getUserForSideBar Error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

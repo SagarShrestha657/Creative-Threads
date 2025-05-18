@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
     };
 
     if (receiverSocketId) {
-      io.to(receiverId).emit("receiveMessage", fullMessage);
+      socket.to(receiverId).emit("receiveMessage", fullMessage);
     }
   });
 

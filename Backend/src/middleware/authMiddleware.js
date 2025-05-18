@@ -21,7 +21,7 @@ export const protectedRoute = async (req, res, next) => {
             return res.status(404).json({ message: "User not found" })
         }
         req.decode = decoded
-        req.user = token
+        req.user = user
         next()
     } catch (error) {
         console.log("Error in protected middleware", error.message)
