@@ -17,6 +17,7 @@ import NotificationPage from "./pages/NotificationPage";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import OtherUserProfile from "./pages/OtherUserProfilePage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   const { authUser, token, checkAuth, isCheckingAuth } = useAuthStore();
@@ -32,7 +33,7 @@ function App() {
   //     </div>
   //   );
   // console.log(authUser,token)
-  console.log(authUser, token);
+
   return (
     <>
       <Toaster position="top-right" />
@@ -144,6 +145,13 @@ function App() {
           path="/otheruserprofile/:username"
           element={
             token && authUser ? <OtherUserProfile /> : <Navigate to="/login" replace:true />
+          }
+        />
+
+        <Route
+          path="/search"
+          element={
+            token && authUser ? <SearchPage /> : <Navigate to="/login" replace:true />
           }
         />
       </Routes>

@@ -511,7 +511,7 @@ export const getotheruserposts = async (req, res) => {
     const username = req.query.username;
     const user = await User.findOne({ username: username });
     if (!user) return res.status(404).json({ message: "user not found" });
-    const posts = await Post.findOne({ username: user_id }).populate("username", "username profilePic");
+    const posts = await Post.find({ username: user._id }).populate("username", "username profilePic");
     if (!posts) return res.status(404).json({ message: "user have not posted " })
     return res.status(200).json(posts)
   } catch (err) {

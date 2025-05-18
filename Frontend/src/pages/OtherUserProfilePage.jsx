@@ -174,7 +174,7 @@ const OtherUserProfile = () => {
                             {/* Stats */}
                             <div className="flex justify-center md:justify-start gap-6 mb-4">
                                 {user.role === "artist" && <div className="text-center">
-                                    <p className="font-bold">{posts.length}</p>
+                                    <p className="font-bold">{posts?.length || 0}</p>
                                     <p className="text-gray-500">Posts</p>
                                 </div>}
                                 <div className="text-center">
@@ -229,7 +229,7 @@ const OtherUserProfile = () => {
 
                     {activeTab === 'posts' && user.role === "artist" && (
                         <div className="p-4">
-                            {posts.length > 0 && (
+                            {posts?.length > 0 && (
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     {posts.slice().reverse().map((post, index) => (
                                         <div key={index} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
@@ -260,7 +260,7 @@ const OtherUserProfile = () => {
 
                     {activeTab === 'mostliked' && user.role === "artist" && (
                         <div className="p-4">
-                            {mostliked.length > 0 && (
+                            {mostliked?.length > 0 && (
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     {mostliked.map((post) => (
                                         <div

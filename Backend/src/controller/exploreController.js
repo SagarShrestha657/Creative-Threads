@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/userModel.js";
+import Post from "../models/postModel.js";
 
 export const getUsers = async (req, res) => {
   try {
@@ -55,3 +56,39 @@ function formatFollowers(count) {
   if (count >= 1000) return (count / 1000).toFixed(1) + "k";
   return count.toString();
 }
+
+export const search = async (req, res) => {
+  const { type, q } = req.params;
+  console.log(req.params);
+  if (!q.trim()) return res.json({ results: [] });
+
+  try {
+    console.log("Searching for:", q,type)
+    if (type === "users") {
+      const users = await User.find({
+        username: { $regex: q, $options: "i" },
+      })
+        .select("_id username profilePic arttype followers")
+        .limit(20);
+      return res.json({ results: users });
+    } else if (type === "posts") {
+      const posts = await Post.find({
+        $or: [
+          { title: { $regex: q, $options: "i" } },
+          { description: { $regex: q, $options: "i" } },
+        ],
+      })
+        .select("_id title description image")
+        .populate({
+          path: "username",
+          select: "username",
+        })
+        .limit(20);
+      return res.json({ results: posts });
+    } else {
+      return res.status(400).json({ message: "Invalid search type." });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Server error." });
+  }
+};

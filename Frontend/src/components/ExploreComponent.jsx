@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../lib/axios";
-import { X } from "lucide-react";
+import { X,Search } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import NProgress from "nprogress";
@@ -104,7 +104,7 @@ const ExploreComponent = () => {
   // ];
 
   return (
-    <div className="bg-black min-h-screen text-white px-4 py-6 max-w-7xl mx-auto relative">
+    <div className="bg-black min-h-screen text-white px-4 mt-0 max-w-7xl mx-auto relative">
       {/* Category Filter */}
       {/* <div className="flex overflow-x-auto space-x-4 mb-8 scrollbar-hide">
         {categories.map((cat, i) => (
@@ -117,6 +117,15 @@ const ExploreComponent = () => {
           </button>
         ))}
       </div> */}
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={() => navigate("/search")}
+          className="flex items-center w-full max-w-md bg-neutral-900 border border-neutral-700 rounded-full px-4 py-2 text-left text-zinc-400 hover:bg-neutral-800 transition"
+        >
+          <Search size={20} className="mr-2" />
+          <span className="flex-1">Search users or posts...</span>
+        </button>
+      </div>
 
       {/* Trending Artists */}
       <div className="mb-12">

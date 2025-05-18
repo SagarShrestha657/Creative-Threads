@@ -84,6 +84,9 @@ const ChatInput = () => {
           className="flex-1 bg-transparent text-white placeholder-zinc-500 focus:outline-none"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === "Enter") e.preventDefault();
+          }}
         />
 
         <input

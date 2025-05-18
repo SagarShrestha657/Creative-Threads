@@ -24,9 +24,7 @@ const Profile = () => {
 
     const fetchPosts = async () => {
         try {
-            console.log("authUser: ", authUser);
             const res = await axiosInstance.get(`/posts/getmypost`); // 
-            console.log(res.data.posts);
             setposts(res.data.posts);
         } catch (err) {
             console.error('Error fetching user posts:', err.response.data.message);
