@@ -32,7 +32,7 @@ const Email_address = () => {
     try {
       NProgress.start();
       const res = await axiosInstance.post("/auth/emailaddress", { email })
-      await user(res.data)
+      await user(res.data.safeUser)
       toast.success("Email sent successfully!")
       setemail("")
       NProgress.done();

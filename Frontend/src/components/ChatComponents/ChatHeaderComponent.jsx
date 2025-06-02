@@ -3,14 +3,16 @@ import { useAuthStore } from "../../store/useAuthStore";
 import { MoreVertical, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
-  const { onlineUser, authUser } = useAuthStore();
+  const { onlineUsers, authUser } = useAuthStore();
   const navigate = useNavigate();
+
+  const isOnline = selectedUser?._id && onlineUsers.includes(selectedUser._id);
+
   return (
     <>
-      <div className="p-4 border-b border-neutral-200/20 flex items-center justify-between  ">
+      <div className="p-4 border-b border-neutral-200/20 flex items-center justify-between">
         <div className="flex items-center">
           <img
             src={selectedUser.profilePic}
@@ -33,7 +35,7 @@ const ChatHeader = () => {
             <p className="text-sm text-gray-400">
               {selectedUser.role.charAt(0).toUpperCase() +
                 selectedUser.role.slice(1)}{" "}
-              • Online
+              • {isOnline ? "Online" : "Offline"}
             </p>
           </div>
         </div>

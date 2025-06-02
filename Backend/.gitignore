@@ -1,6 +1,9 @@
 # Node modules
 node_modules/
 
+vision-key.json
+
+
 # Build artifacts
 build/
 dist/

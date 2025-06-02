@@ -72,7 +72,7 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full relative">
+    <div className="flex-1 flex flex-col h-screen relative pb-16 lg:pb-0">
       {/* Fixed Header */}
       <div className="sticky top-0 z-10 bg-black">
         <ChatHeader />

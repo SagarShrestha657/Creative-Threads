@@ -8,7 +8,8 @@ import "nprogress/nprogress.css";
 
 export default function EditProfile() {
     const { authUser, userUpdate } = useAuthStore();
-    const [name, setName] = useState(authUser.username || "");
+    const [name, setName] = useState(authUser.name || "");
+    const [username, setUsername] = useState("");
     const [artType, setArtType] = useState(authUser.arttype || "");
     const [bio, setBio] = useState(authUser.bio || "");
     const [image, setImage] = useState(authUser.profilePic || null);
@@ -33,31 +34,34 @@ export default function EditProfile() {
         try {
             const formData = new FormData();
             formData.append("profilePic", image);
-            formData.append("username", name);
+            formData.append("username", username);
+            formData.append("name", name);
             formData.append("arttype", artType);
             formData.append("bio", bio);
-            // console.log(formData)
 
             const res = await axiosInstance.patch("/update/editprofile", formData);
-
-            userUpdate("username", name);
+            if (username.length > 0) {
+                userUpdate("username", username);
+            }
+            userUpdate("name", name);
             userUpdate("arttype", artType);
             userUpdate("bio", bio);
             userUpdate("profilePic", res.data.profilePic);
-
+            setIsSubmitting(false)
             toast.success("Profile updated successfully");
             NProgress.done();
             navigate(`/profile/${authUser._id}`, { replace: true });
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong");
-
+            
         }
         setIsSubmitting(false);
         NProgress.done();
     };
 
     const isUnchanged =
-        name === authUser.username &&
+        name === authUser.name &&
+        username.length == 0  &&
         artType === authUser.arttype &&
         bio === authUser.bio &&
         image === authUser.profilePic;
@@ -94,6 +98,16 @@ export default function EditProfile() {
                         className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-1">UserName</label>
+                    <input
+                        type="text"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                        value={username}
+                        placeholder={authUser.username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
 

@@ -34,7 +34,7 @@ const SignUp = () => {
       NProgress.start();
       const res = await axiosInstance.post("/auth/signup", signup);
       await user(res.data);
-      toast.success("Signup successful! Redirecting...");
+      toast.success("Signup successfull! Redirecting...");
       setsignup({ username: "", email: "", password: "", role: "" });
       NProgress.done()
       navigate("/emailverification");

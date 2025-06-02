@@ -7,6 +7,7 @@ const userschema = new mongoose.Schema(
     },
     name: {
       type: String,
+      trim: true,
     },
     username: {
       type: String,
@@ -15,16 +16,20 @@ const userschema = new mongoose.Schema(
     },
     bio: {
       type: String,
+      trim: true,
     },
     arttype: {
       type: String,
+      trim: true,
     },
     email: {
       type: String,
       required: true,
+      trim: true,
     },
     phone: {
       type: Number,
+      trim: true,
     },
     dob: {
       type: Date,
@@ -34,9 +39,11 @@ const userschema = new mongoose.Schema(
     },
     country: {
       type: String,
+      trim: true,
     },
     city: {
       type: String,
+      trim: true,
     },
     password: {
       type: String,
@@ -79,10 +86,10 @@ userschema.pre("save", function (next) {
   if (!this.profilePic) {
     if (this.role === "artist") {
       this.profilePic =
-        "https://res.cloudinary.com/dojtnawk0/image/upload/v1744267624/test/fgwlrnundr23vyqcbyuq.jpg";
+        "https://res.cloudinary.com/dyg0nl1fj/image/upload/v1747728955/xvgry8s0moxnfowdubod.jpg";
     } else {
       this.profilePic =
-        "https://res.cloudinary.com/dojtnawk0/image/upload/v1744267591/test/jeg2eevftzovl69ap2o0.jpg";
+        "https://res.cloudinary.com/dyg0nl1fj/image/upload/v1747729261/eqfq6yzi8vs5wsvndxbf.jpg";
     }
   }
   next();

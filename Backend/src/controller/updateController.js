@@ -68,13 +68,26 @@ export const personalinfo = async (req, res) => {
 
 export const editprofile = async (req, res) => {
   try {
-    const { username, arttype, bio } = req.body;
+    const { username, name, arttype, bio } = req.body;
 
-    const updateData = {
-      username,
-      arttype,
-      bio,
-    };
+    if (username.length > 0) {
+      const existingUser = await User.find({ username: username });
+      if (existingUser.length > 0) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+      var updateData = {
+        name,
+        username,
+        arttype,
+        bio,
+      };
+    } else {
+      var updateData = {
+        name,
+        arttype,
+        bio,
+      };
+    }
 
     if (req.file) {
       const upload_resp = await uploader(req.file); // Pass multer's file

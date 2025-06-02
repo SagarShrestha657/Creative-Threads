@@ -3,6 +3,7 @@ import { axiosInstance } from "../lib/axios.js";
 import { persist, createJSONStorage } from "zustand/middleware";
 import toast from "react-hot-toast";
 import { Navigate } from "react-router-dom";
+import { socket } from "../lib/socket";
 
 export const useAuthStore = create(
   persist(
@@ -28,14 +29,13 @@ export const useAuthStore = create(
           },
         }));
       },
+
       checkAuth: async () => {
         try {
           const res = await axiosInstance.get("/auth/check", {
             withCredentials: true,
           });
-          // console.log(res);
           set({ token: true });
-          // get().connectSocket();
         } catch (error) {
           console.log("Error in CheckAuth: ", error.message);
           set({ authUser: null });
@@ -44,8 +44,36 @@ export const useAuthStore = create(
           set({ isCheckingAuth: false });
         }
       },
-      connectSocket: () => {},
-      disconnectSocket: () => {},
+
+      connectSocket: () => {
+        if (get().authUser?._id) {
+          socket.connect();
+          socket.emit("join", get().authUser._id);
+          
+          // Listen for initial list of online users
+          socket.on("onlineUsers", (users) => {
+            set({ onlineUsers: users });
+          });
+
+          // Listen for online/offline events
+          socket.on("userOnline", (userId) => {
+            set((state) => ({
+              onlineUsers: [...new Set([...state.onlineUsers, userId])]
+            }));
+          });
+
+          socket.on("userOffline", (userId) => {
+            set((state) => ({
+              onlineUsers: state.onlineUsers.filter(id => id !== userId)
+            }));
+          });
+        }
+      },
+
+      disconnectSocket: () => {
+        socket.disconnect();
+        set({ onlineUsers: [] });
+      },
     }),
     {
       name: "user-storage",

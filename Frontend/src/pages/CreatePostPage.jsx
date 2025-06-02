@@ -99,10 +99,10 @@ const CreatePost = () => {
 
     return (
         <div className="bg-black min-h-screen flex flex-col md:flex-row">
-            <Navbar />
+            {/* <Navbar /> */}
             <div className="w-[95%] mx-auto px-4 py-6">
                 <div className="bg-white rounded-lg border border-neutral-200/20 mb-6">
-                    <div className="p-6 border-b border-neutral-200/20">
+                    <div className="p-6 border-b border-neutral-200/20 flex items-center justify-between">
                         <h2 className="text-2xl font-bold">Create Post</h2>
                     </div>
                     <div className="p-6">
@@ -129,26 +129,72 @@ const CreatePost = () => {
                         <div className="mb-6">
                             <div className="border-2 border-dashed border-neutral-200/20 rounded-lg p-8">
                                 <div className="text-center">
-                                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        />
-                                    </svg>
-                                    <p className="mt-2 text-sm text-gray-500">Drag and drop your artwork here, or click to browse</p>
-                                    <p className="mt-1 mb-4 text-xs text-gray-400">Only image formats allowed: JPG, JPEG, PNG, GIF (Max 10MB each)</p>
-                                    <label className="relative cursor-pointer text-sm bg-black border px-4 py-2 text-white rounded-lg hover:bg-gray-900 transition">
-                                        Choose Files
-                                        <input
-                                            type="file"
-                                            accept=".jpg,.jpeg,.png,.gif"
-                                            multiple
-                                            onChange={handleimagesChange}
-                                            className="absolute opacity-0 left-0 top-0 w-full h-full cursor-pointer"
-                                        />
-                                    </label>
+                                    {files.length === 0 ? (
+                                        <>
+                                            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                                />
+                                            </svg>
+                                            <p className="mt-2 text-sm text-gray-500">Drag and drop your artwork here, or click to browse</p>
+                                            <p className="mt-1 mb-4 text-xs text-gray-400">Only image formats allowed: JPG, JPEG, PNG, GIF (Max 10MB each)</p>
+                                            <label className="relative cursor-pointer text-sm bg-black border px-4 py-2 text-white rounded-lg hover:bg-gray-900 transition">
+                                                Choose Files
+                                                <input
+                                                    type="file"
+                                                    accept=".jpg,.jpeg,.png,.gif"
+                                                    multiple
+                                                    onChange={handleimagesChange}
+                                                    className="absolute opacity-0 left-0 top-0 w-full h-full cursor-pointer"
+                                                />
+                                            </label>
+                                        </>
+                                    ) : (
+                                        <div className="flex flex-col items-center">
+                                            <span className="bg-black text-white text-xs px-3 py-1 rounded-full shadow mb-4">
+                                                ↓ Scroll down to preview your post
+                                            </span>
+                                            <div className="flex flex-wrap gap-4 justify-center mb-2">
+                                                {previews.map((src, idx) => (
+                                                    <div key={idx} className="relative inline-block">
+                                                        <img
+                                                            src={src}
+                                                            alt={`preview-${idx}`}
+                                                            className="w-20 h-20 object-cover rounded border"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newFiles = [...files];
+                                                                const newPreviews = [...previews];
+                                                                newFiles.splice(idx, 1);
+                                                                newPreviews.splice(idx, 1);
+                                                                setFiles(newFiles);
+                                                                setpreviews(newPreviews);
+                                                            }}
+                                                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-800"
+                                                            title="Remove"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className="text-xs text-blue-600 underline mt-2"
+                                                onClick={() => {
+                                                    setFiles([]);
+                                                    setpreviews([]);
+                                                }}
+                                            >
+                                                Remove all
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -189,7 +235,7 @@ const CreatePost = () => {
                 </div>
 
                 {/* Preview */}
-                <div className="bg-white rounded-lg border border-neutral-200/20">
+                <div className="bg-white rounded-lg border border-neutral-200/20 mt-4 relatives mb-16 lg:mb-0">
                     <ImagePreviewSlider previews={previews} title={title} description={description} />
                 </div>
             </div>

@@ -33,10 +33,6 @@ const SearchPage = () => {
 
     return (
         <div className="bg-black min-h-screen text-white flex flex-col md:flex-row">
-            {/* Navbar column */}
-            <div>
-                <Navbar />
-            </div>
 
             {/* Search and results column */}
             <div className=" flex flex-col items-center w-[95%] mx-auto">

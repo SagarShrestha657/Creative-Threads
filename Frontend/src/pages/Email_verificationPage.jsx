@@ -10,7 +10,7 @@ import "nprogress/nprogress.css";
 const Email_verification = () => {
   const [code, setcode] = useState("")
   const navigate = useNavigate()
-  const { checkAuth, authUser } = useAuthStore()
+  const { checkAuth } = useAuthStore()
 
   const handlechange = (e) => {
     setcode(e.target.value)
@@ -27,7 +27,6 @@ const Email_verification = () => {
       NProgress.start();
       const data = { email: email, code: code }
       const res = await axiosInstance.post("/auth/verificationcode", data)
-      console.log(res);      
       await checkAuth()
       toast.success("Email verified successfully!")
       setcode("")

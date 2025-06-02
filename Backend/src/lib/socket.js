@@ -25,6 +25,12 @@ io.on("connection", (socket) => {
   socket.on("join", (userId) => {
     socket.join(userId); // Join their own room
     onlineUsers.set(userId, socket.id);
+    
+    // Send current list of online users to the newly connected user
+    socket.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    
+    // Broadcast to all clients that this user is online
+    io.emit("userOnline", userId);
   });
 
   // Handle message sending
@@ -37,7 +43,7 @@ io.on("connection", (socket) => {
     };
 
     if (receiverSocketId) {
-      socket.to(receiverId).emit("receiveMessage", fullMessage);
+      io.to(receiverId).emit("receiveMessage", fullMessage);
     }
   });
 
@@ -55,11 +61,17 @@ io.on("connection", (socket) => {
 
   // On disconnect
   socket.on("disconnect", () => {
+    let disconnectedUserId = null;
     for (const [userId, sockId] of onlineUsers.entries()) {
       if (sockId === socket.id) {
+        disconnectedUserId = userId;
         onlineUsers.delete(userId);
         break;
       }
+    }
+    if (disconnectedUserId) {
+      // Broadcast to all clients that this user is offline
+      io.emit("userOffline", disconnectedUserId);
     }
   });
 });

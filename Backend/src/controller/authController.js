@@ -22,42 +22,39 @@ export const signup = async (req, res) => {
 
     const user = await User.findOne({ email });
 
+    if(user.username === username)
+      return res
+        .status(400)
+        .json({ message: "Username is already taken" });
+
     if (user)
       return res
         .status(400)
         .json({ message: "User has been already registered." });
 
+    
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const verificationCode = Math.floor(
+    const verificationcode = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
 
     const newUser = new User({
-      username:username.trim(),
+      name: username,
+      username: username,
       email,
       role,
       password: hashedPassword,
-      verificationCode,
+      verificationCode: verificationcode,
     });
 
-    sendVerificationEmail(email, verificationCode);
+    sendVerificationEmail(email, verificationcode);
 
-    //generateToken(newUser._id, res);
-    await newUser.save();
-
-    res.status(201).json({
-      _id: newUser._id,
-      username: newUser.username,
-      email: newUser.email,
-      phone: newUser.phone,
-      role: newUser.role,
-      profilePic: newUser.profilePic,
-      bio: newUser.bio,
-      arttype: newUser.arttype,
-      followers: newUser.followers,
-      following: newUser.following,
-    });
+    const savedUser = await newUser.save();
+    const userObject = savedUser.toObject();
+    const { password: _, verificationCode: __, isVerified: ___, ...safeUser } = userObject;
+    res.status(201).json(safeUser);
   } catch (error) {
     console.log("Error Signup Controller", error.message);
     res.status(500).json({ message: "Server Error" });
@@ -65,66 +62,37 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
+
 
     if (!user) return res.status(400).json({ message: "user doesn`t exists" });
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
+
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid credentials" });
 
     if (!user.isVerified) {
-      console.log(user.isVerified);
-      const verificationCode = Math.floor(
+      const verificationcode = Math.floor(
         100000 + Math.random() * 900000
       ).toString();
       await User.findOneAndUpdate(
         { email },
-        { verificationCode: verificationCode }
+        { verificationCode: verificationcode }
       );
-      sendVerificationEmail(user.email, verificationCode);
-      return res.status(200).json({
-        emailverification: false,
-        _id: user._id,
-        email: user.email,
-        role: user.role,
-        username: user.username,
-        phone: user.phone,
-        bio: user.bio,
-        arttype: user.arttype,
-        profilePic: user.profilePic,
-        followers: user.followers,
-        following: user.following,
-        dob: user.dob,
-        country: user.country,
-        city: user.city,
-        phone: user.phone,
-        gender: user.gender,
-      });
-    }
-    generateToken(user._id, res);
+      sendVerificationEmail(user.email, verificationcode);
+      const { password, verificationCode, isVerified, ...safeUser } = user.toObject();
+      res.status(200).json({ ...safeUser, emailverification: false });
+    } else {
+      generateToken(user._id, res);
 
-    res.status(200).json({
-      emailverification: true,
-      _id: user._id,
-      email: user.email,
-      role: user.role,
-      username: user.username,
-      phone: user.phone,
-      bio: user.bio,
-      arttype: user.arttype,
-      profilePic: user.profilePic,
-      followers: user.followers,
-      following: user.following,
-      dob: user.dob,
-      country: user.country,
-      city: user.city,
-      phone: user.phone,
-      gender: user.gender,
-    });
+      const { password, verificationCode, isVerified, ...safeUser } = user.toObject();
+      return res.status(200).json({ ...safeUser, emailverification: true });
+    }
   } catch (error) {
     console.log("Error in Login Controller", error.message);
     res.status(500).json({ message: "Server Error" });
@@ -192,31 +160,16 @@ export const emailAddressCheck = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const verificationCode = Math.floor(
+      const verificationcode = Math.floor(
         100000 + Math.random() * 900000
       ).toString();
 
-      user.verificationCode = verificationCode;
+      user.verificationCode = verificationcode;
 
       await user.save();
-      sendVerificationEmail(email, verificationCode);
-      res.status(200).json({
-        _id: user._id,
-        email: user.email,
-        role: user.role,
-        username: user.username,
-        phone: user.phone,
-        bio: user.bio,
-        arttype: user.arttype,
-        profilePic: user.profilePic,
-        followers: user.followers,
-        following: user.following,
-        dob: user.dob,
-        country: user.country,
-        city: user.city,
-        phone: user.phone,
-        gender: user.gender,
-      })
+      sendVerificationEmail(email, verificationcode);
+      const { password, verificationCode, isVerified, ...safeUser } = user.toObject();
+      return res.status(200).json(safeUser);
     }
     else {
       res.status(401).json({ message: "user does'nt exists" })

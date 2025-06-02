@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "../store/useAuthStore";
@@ -42,72 +42,28 @@ const Login = () => {
     try {
       NProgress.start();
       const res = await axiosInstance.post("/auth/login", login);
-      // console.log(res);
-      const {
-        username,
-        email,
-        _id,
-        role,
-        profilePic,
-        followers,
-        following,
-        dob,
-        country,
-        city,
-        phone,
-        gender,
-      } = res.data;
-
-      const userData = {
-        username,
-        email,
-        _id,
-        role,
-        profilePic,
-        followers,
-        following,
-        dob,
-        country,
-        city,
-        phone,
-        gender,
-      };
-
-      await user(userData);
-      localStorage.setItem("userId", userData._id);
-      await checkAuth();
-      if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
-        localStorage.setItem('rememberedPassword', password);
+      if (!res.data.emailverification) {
+        await user(res.data);
+        localStorage.setItem("email", login.email)
+        setlogin({ email: "", password: "" });
+        NProgress.done();
+        navigate("/emailverification")
       } else {
-        localStorage.removeItem('rememberedEmail');
-        localStorage.removeItem('rememberedPassword');
+        await user(res.data);
+       // localStorage.setItem("userId", res.data.safeUser._id);
+        await checkAuth();
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', email);
+          localStorage.setItem('rememberedPassword', password);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
+        }
+        toast.success("Login successful!");
+        setlogin({ email: "", password: "" });
+        NProgress.done();
+        navigate("/");
       }
-      toast.success("Login successful!");
-      setlogin({ email: "", password: "" });
-      NProgress.done();
-      navigate("/");
-
-      //   const res = await axiosInstance.post("/auth/login", login)
-      //   const data = {
-      //     username: res.data.username,
-      //     email: res.data.email,
-      //     _id: res.data._id,
-      //     profilePic: res.data.profilePic,
-      //     role: res.data.role,
-      //     phone: res.data.phone,
-      //     bio:res.data.bio,
-      //     arttype:res.data.arttype
-      //   }
-      //   if (!res.data.emailverification) {
-      //     await user(data)
-      //     window.location.href = "/emailverification"
-      //   } else {
-      //     await user(data)
-      //     await checkAuth()
-      //     navigate("/")
-      //   }
-      //   setlogin({ email: "", password: "" })
     } catch (error) {
       console.error("Login error:", error);
       const message =

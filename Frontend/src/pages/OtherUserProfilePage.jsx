@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef} from 'react';
 import { Heart } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
@@ -25,6 +25,7 @@ const OtherUserProfile = () => {
     const [showFullDesc, setShowFullDesc] = useState({});
     const navigate = useNavigate();
     const { setSelectedUser } = useChatStore();
+    const clickTimeoutRef = useRef();
      
 
     const fetchUserProfile = async () => {
@@ -130,13 +131,30 @@ const OtherUserProfile = () => {
         }
     };
 
+    const handleImageClick = (post) => {
+        if (clickTimeoutRef.current) {
+            clearTimeout(clickTimeoutRef.current);
+            clickTimeoutRef.current = null;
+        }
 
+        clickTimeoutRef.current = setTimeout(() => {
+            setSelectedArtwork(post);
+            clickTimeoutRef.current = null;
+        }, 300); // Adjust delay as needed (e.g., 300ms)
+    };
+
+    const handleImageDoubleClick = (postId) => {
+        if (clickTimeoutRef.current) {
+            clearTimeout(clickTimeoutRef.current);
+            clickTimeoutRef.current = null;
+        }
+        handleLikeToggle(postId); // Your existing double-click action
+    };
 
     if (!user) return <div className="text-center text-white mt-20">Loading...</div>;
 
     return (
         <div className="bg-[#080808] min-h-screen flex flex-col md:flex-row">
-            <Navbar />
             <div className="w-[80%] mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 {/* Profile Header */}
                 <div className="bg-white rounded-lg border border-neutral-200/20 p-6 mb-6 w-full overflow-hidden">
@@ -233,8 +251,8 @@ const OtherUserProfile = () => {
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     {posts.slice().reverse().map((post, index) => (
                                         <div key={index} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
-                                            onDoubleClick={() => handleLikeToggle(post._id)}
-                                            onClick={() => setSelectedArtwork(post)}
+                                        onClick={() => handleImageClick(post)}
+                                        onDoubleClick={() => handleImageDoubleClick(post._id)}
                                         >
                                             <img
                                                 src={post.image[0]}
@@ -266,8 +284,8 @@ const OtherUserProfile = () => {
                                         <div
                                             key={post._id}
                                             className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
-                                            onDoubleClick={() => handleLikeToggle(post._id)}
-                                            onClick={() => setSelectedArtwork(post)}
+                                            onClick={() => handleImageClick(post)}
+                                            onDoubleClick={() => handleImageDoubleClick(post._id)}
                                         >
                                             <img
                                                 src={post.image[0]}
