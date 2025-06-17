@@ -21,8 +21,6 @@ export const getUserForSideBar = async (req, res) => {
       .sort({ createdAt: -1 })
       .select("senderId receiverId -_id");
 
-    console.log("Message Users found:", messageUsers);
-
     const userIds = [
       ...new Set(
         messageUsers.flatMap((msg) => [
@@ -77,8 +75,6 @@ export const getMessage = async (req, res) => {
         : "",
     }));
 
-    console.log(decryptedMessages);
-
     res.status(200).json(decryptedMessages);
   } catch (error) {
     console.log("getMessage Controller Error: ", error.message);
@@ -112,8 +108,6 @@ export const sendMessage = async (req, res, io) => {
       image: imageURL,
     });
     await newMessage.save();
-
-    console.log(newMessage)
 
     await notification.create({
       recipient: receiverId,
