@@ -29,8 +29,7 @@ const uploader = async (files) => {
   const resp = [];
   for (let i = 0; i < files.length; i++) {
     const buffer = await sharp(files[i].buffer)
-      .resize({ width: 512 }) // or any reasonable size
-      .jpeg({ quality: 30 })
+      .jpeg({ quality: 90 }) // High quality, no resize
       .toBuffer();
     const result = await uploadtocloudinary(buffer);
     resp.push(result);
