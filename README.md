@@ -49,7 +49,6 @@ A full-stack social media platform designed specifically for artists to share, d
 - **Cloudinary** - Cloud image management
 - **Nodemailer** - Email sending
 - **CORS** - Cross-origin resource sharing
-- **Google Cloud Vision** - Image analysis
 
 ### DevOps
 - **Docker** - Containerization
